@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna's House Party | 23 MEI 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #F854B5;
+            --primary-orange: #FF8E64;
+            --off-white: #F9F7F2;
+            --dark-bg: #120a1a;
+            --spotify-green: #1DB954;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--off-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0;
+        }
+
+        .heading-font {
+            font-family: 'Archivo Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            display: inline-block;
+            transform: scaleX(1.05);
+            transform-origin: center;
+        }
+
+        .bg-gradient-main {
+            background: linear-gradient(135deg, #F854B5 0%, #FF8E64 50%, #A277FF 100%);
+            background-attachment: fixed;
+        }
+
+        .topographic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,100 Q250,50 500,100 T1000,100' fill='none' stroke='white' stroke-opacity='0.15' stroke-width='1'/%3E%3Cpath d='M0,200 Q250,150 500,200 T1000,200' fill='none' stroke='white' stroke-opacity='0.15' stroke-width='1'/%3E%3Cpath d='M0,300 Q250,250 500,300 T1000,300' fill='none' stroke='white' stroke-opacity='0.15' stroke-width='1'/%3E%3Cpath d='M0,400 Q250,350 500,400 T1000,400' fill='none' stroke='white' stroke-opacity='0.15' stroke-width='1'/%3E%3Cpath d='M0,500 Q250,450 500,500 T1000,500' fill='none' stroke='white' stroke-opacity='0.15' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: cover;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes reveal {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .reveal-anim {
+            animation: reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .nav-link:hover {
+            color: white;
+            opacity: 0.8;
+        }
+
+        .ticket-button {
+            background-color: var(--off-white);
+            color: black;
+            font-weight: 900;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .ticket-button:hover {
+            transform: scale(1.05) translateY(-2px);
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        section {
+            padding: 120px 24px;
+        }
+
+        .countdown-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .countdown-box {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1rem;
+            padding: 1rem;
+            min-width: 80px;
+            backdrop-filter: blur(4px);
+        }
+
+        .countdown-val {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 2.5rem;
+            display: block;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .countdown-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0.6;
+            font-weight: 900;
+        }
+
+        .artist-card {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .artist-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .artist-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            filter: grayscale(20%) contrast(110%);
+            transition: transform 0.5s ease;
+        }
+
+        .artist-card:hover .artist-image {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .time-badge {
+            display: inline-block;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .spotify-link {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 20;
+        }
+
+        .spotify-link:hover {
+            background: var(--spotify-green);
+            transform: scale(1.15);
+            border-color: transparent;
+        }
+
+        .spotify-link svg {
+            fill: white;
+            width: 20px;
+            height: 20px;
+        }
+
+        .partner-logo-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .partner-logo-box:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .sound-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        .ticket-shop-container {
+            min-height: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .modal:not(.hidden) {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .heading-font { transform: scaleX(1); }
+            section { padding: 80px 20px; }
+            .countdown-val { font-size: 1.75rem; }
+            .countdown-box { min-width: 65px; padding: 0.75rem; }
+            .countdown-container { gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-main">
+    <div class="topographic-overlay"></div>
+
+    <!-- Navigatie -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 py-4 flex justify-between items-center glass-panel">
+        <div class="heading-font text-xl tracking-tighter">Luna's</div>
+        <div class="hidden md:flex space-x-10">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#lineup" class="nav-link">Line-up</a>
+            <a href="#tickets" class="nav-link">Tickets</a>
+            <a href="#info" class="nav-link">Info</a>
+        </div>
+        <a href="#tickets" class="ticket-button px-7 py-2.5 rounded-full text-[11px] uppercase tracking-wider">Tickets</a>
+    </nav>
+
+    <div class="content-wrapper">
+        <!-- Hero Sectie -->
+        <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center">
+            <div class="reveal-anim" style="animation-delay: 0.2s">
+                <h1 class="heading-font text-6xl md:text-[10rem] mb-6 leading-none drop-shadow-lg">
+                    Luna's<br>House Party
+                </h1>
+            </div>
+            
+            <div class="reveal-anim w-24 h-1 bg-white mb-8 opacity-50 mx-auto" style="animation-delay: 0.4s"></div>
+            
+            <div class="reveal-anim" style="animation-delay: 0.6s">
+                <h2 class="heading-font text-4xl md:text-6xl mb-4 drop-shadow-md">23 MEI 2026</h2>
+                <p class="text-lg md:text-xl uppercase tracking-[0.4em] font-black mb-2 opacity-90 text-white">FG-LIVE HEERHUGOWAARD</p>
+                <p class="text-xs uppercase tracking-[0.2em] opacity-80 mb-8">20:00 - 03:00 | 18+</p>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="reveal-anim countdown-container" style="animation-delay: 0.8s">
+                <div class="countdown-box">
+                    <span id="days" class="countdown-val">00</span>
+                    <span class="countdown-label">Dagen</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="hours" class="countdown-val">00</span>
+                    <span class="countdown-label">Uren</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="minutes" class="countdown-val">00</span>
+                    <span class="countdown-label">Min</span>
+                </div>
+                <div class="countdown-box">
+                    <span id="seconds" class="countdown-val">00</span>
+                    <span class="countdown-label">Sec</span>
+                </div>
+            </div>
+            
+            <div class="reveal-anim mt-12" style="animation-delay: 1s">
+                <a href="#tickets" class="ticket-button px-14 py-5 rounded-2xl text-lg uppercase inline-block font-black shadow-lg">
+                    Koop Tickets
+                </a>
+            </div>
+        </section>
+
+        <!-- Line-up Sectie -->
+        <section id="lineup" class="max-w-5xl mx-auto">
+            <div class="text-center mb-20">
+                <h3 class="heading-font text-5xl md:text-8xl mb-2 drop-shadow-md">Line-up</h3>
+                <p class="text-[11px] uppercase tracking-[0.5em] text-white opacity-80 font-bold mb-6">Timetable</p>
+                <div class="h-0.5 w-16 bg-white/40 mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- SANTO -->
+                <div class="artist-card rounded-3xl">
+                    <div class="artist-image bg-white/10 flex items-center justify-center">
+                        <span class="opacity-20 heading-font text-6xl">S</span>
+                    </div>
+                    <div class="p-6 text-center flex flex-col items-center">
+                        <span class="heading-font text-2xl">SANTO</span>
+                        <span class="time-badge">20:00 - 22:00</span>
+                    </div>
+                    <a href="https://open.spotify.com/artist/0yjHTwmfhnLFFaVl5quaM7?si=Yo5DH9bpTayxfJeQjc9UHg" target="_blank" class="spotify-link" title="Spotify SANTO">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.484-1.071.26-2.96-1.808-6.684-2.216-11.074-1.21-.418.096-.837-.17-.933-.587-.096-.418.17-.837.587-.933 4.807-1.097 8.927-.633 12.211 1.373.366.223.483.704.26 1.071-.02.033-.04.067-.08.026zm1.485-3.262c-.28.455-.877.599-1.332.319-3.39-2.083-8.557-2.686-12.564-1.468-.512.155-1.054-.135-1.21-.647-.155-.512.135-1.054.647-1.21 4.584-1.391 10.283-.715 14.14 1.66.455.28.599.877.319 1.332v.134zm.126-3.41c-4.068-2.415-10.783-2.639-14.686-1.454-.624.19-1.282-.158-1.472-.782-.19-.624.158-1.282.782-1.472 4.49-1.364 11.913-1.103 16.602 1.68.562.333.75 1.058.417 1.62-.333.562-1.058.75-1.62.417l-.023-.01z"/></svg>
+                    </a>
+                </div>
+
+                <!-- LUCA ROSSI -->
+                <div class="artist-card rounded-3xl">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=800&q=80" alt="Luca Rossi" class="artist-image">
+                    <div class="p-6 text-center flex flex-col items-center">
+                        <span class="heading-font text-2xl">LUCA ROSSI</span>
+                        <span class="time-badge">22:00 - 00:00</span>
+                    </div>
+                    <a href="https://open.spotify.com/artist/7I673u2XTlO4pz29h6wSL2?si=tJ10xuJSRiOuxKdHqeOY4A" target="_blank" class="spotify-link" title="Spotify Luca Rossi">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.484-1.071.26-2.96-1.808-6.684-2.216-11.074-1.21-.418.096-.837-.17-.933-.587-.096-.418.17-.837.587-.933 4.807-1.097 8.927-.633 12.211 1.373.366.223.483.704.26 1.071-.02.033-.04.067-.08.026zm1.485-3.262c-.28.455-.877.599-1.332.319-3.39-2.083-8.557-2.686-12.564-1.468-.512.155-1.054-.135-1.21-.647-.155-.512.135-1.054.647-1.21 4.584-1.391 10.283-.715 14.14 1.66.455.28.599.877.319 1.332v.134zm.126-3.41c-4.068-2.415-10.783-2.639-14.686-1.454-.624.19-1.282-.158-1.472-.782-.19-.624.158-1.282.782-1.472 4.49-1.364 11.913-1.103 16.602 1.68.562.333.75 1.058.417 1.62-.333.562-1.058.75-1.62.417l-.023-.01z"/></svg>
+                    </a>
+                </div>
+
+                <!-- CICI DAZE -->
+                <div class="artist-card rounded-3xl">
+                    <div class="artist-image bg-white/10 flex items-center justify-center">
+                        <span class="opacity-20 heading-font text-6xl">C</span>
+                    </div>
+                    <div class="p-6 text-center flex flex-col items-center">
+                        <span class="heading-font text-2xl">CICI DAZE</span>
+                        <span class="time-badge">00:00 - 01:30</span>
+                    </div>
+                    <a href="https://open.spotify.com/artist/7sXIWw7wdhI07ELeTmGubt?si=3u18Qs3vQAqs9eT75v3kzw" target="_blank" class="spotify-link" title="Spotify Cici Daze">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.484-1.071.26-2.96-1.808-6.684-2.216-11.074-1.21-.418.096-.837-.17-.933-.587-.096-.418.17-.837.587-.933 4.807-1.097 8.927-.633 12.211 1.373.366.223.483.704.26 1.071-.02.033-.04.067-.08.026zm1.485-3.262c-.28.455-.877.599-1.332.319-3.39-2.083-8.557-2.686-12.564-1.468-.512.155-1.054-.135-1.21-.647-.155-.512.135-1.054.647-1.21 4.584-1.391 10.283-.715 14.14 1.66.455.28.599.877.319 1.332v.134zm.126-3.41c-4.068-2.415-10.783-2.639-14.686-1.454-.624.19-1.282-.158-1.472-.782-.19-.624.158-1.282.782-1.472 4.49-1.364 11.913-1.103 16.602 1.68.562.333.75 1.058.417 1.62-.333.562-1.058.75-1.62.417l-.023-.01z"/></svg>
+                    </a>
+                </div>
+
+                <!-- D-STONE -->
+                <div class="artist-card rounded-3xl">
+                    <div class="artist-image bg-white/10 flex items-center justify-center">
+                        <span class="opacity-20 heading-font text-6xl">D</span>
+                    </div>
+                    <div class="p-6 text-center flex flex-col items-center">
+                        <span class="heading-font text-2xl">D-STONE</span>
+                        <span class="time-badge">01:30 - 03:00</span>
+                    </div>
+                    <a href="https://open.spotify.com/artist/54G5Bq4yKz8mwGYFsffne9?si=4HPBBnuqRRykMioFk4VwKg" target="_blank" class="spotify-link" title="Spotify D Stone">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302c-.223.367-.704.484-1.071.26-2.96-1.808-6.684-2.216-11.074-1.21-.418.096-.837-.17-.933-.587-.096-.418.17-.837.587-.933 4.807-1.097 8.927-.633 12.211 1.373.366.223.483.704.26 1.071-.02.033-.04.067-.08.026zm1.485-3.262c-.28.455-.877.599-1.332.319-3.39-2.083-8.557-2.686-12.564-1.468-.512.155-1.054-.135-1.21-.647-.155-.512.135-1.054.647-1.21 4.584-1.391 10.283-.715 14.14 1.66.455.28.599.877.319 1.332v.134zm.126-3.41c-4.068-2.415-10.783-2.639-14.686-1.454-.624.19-1.282-.158-1.472-.782-.19-.624.158-1.282.782-1.472 4.49-1.364 11.913-1.103 16.602 1.68.562.333.75 1.058.417 1.62-.333.562-1.058.75-1.62.417l-.023-.01z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ticket Sectie -->
+        <section id="tickets" class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h3 class="heading-font text-5xl md:text-7xl mb-4 drop-shadow-md">Tickets</h3>
+                <p class="opacity-80 uppercase tracking-widest text-sm font-bold">Beveilig jouw plek op de dansvloer</p>
+            </div>
+            
+            <div class="glass-panel p-4 md:p-8 rounded-[3rem] border-white/20 shadow-2xl overflow-hidden ticket-shop-container">
+                <div id="weeztix-shop-wrapper" style="width: 100%; max-width: 600px; min-height: 400px;">
+                    <!-- Directe integratie code voor Weeztix -->
+                    <div id="shop-frame" data-url="https://shop.weeztix.com/a9fdb09a-bb37-11f0-a9cb-7e126431635e" style="max-width: 600px; margin:0 auto;"></div>
+                    <script src="https://shop.weeztix.com/build/integrate.js"></script>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center px-4">
+                <p class="text-[11px] md:text-xs opacity-70 uppercase tracking-widest leading-relaxed">
+                    Problemen met bestellen? Klik op de 
+                    <a href="https://weeztix.shop/7v867yab" target="_blank" class="underline hover:text-white transition-colors">directe link</a> 
+                    of neem contact op via 
+                    <a href="mailto:info@pulsecollective.nl" class="underline hover:text-white transition-colors">info@pulsecollective.nl</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Ontdek Jouw Sound Section -->
+        <section id="sound" class="max-w-4xl mx-auto">
+            <div class="glass-panel p-10 md:p-16 rounded-[3rem] border-white/20 text-center relative overflow-hidden shadow-2xl">
+                <h3 class="heading-font text-4xl md:text-6xl mb-6 drop-shadow-sm">Ontdek Jouw Sound</h3>
+                <p class="mb-10 opacity-90 max-w-lg mx-auto leading-relaxed font-medium">Klik op een genre en kijk welke DJ het beste bij jouw stijl past.</p>
+                
+                <div class="flex flex-wrap justify-center gap-3 mb-10">
+                    <button onclick="showArtist('Tribal & Groovy', 'CICI DAZE', 'Cici mixt haar creativiteit met een enorme bak energie. Haar sets hebben een lekkere groove met invloeden uit verschillende culturen. Bereid je voor op een energieke performance die je niet stil laat staan.')" class="sound-btn px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-widest">Tribal & Groovy</button>
+                    <button onclick="showArtist('Percussive House', 'D-STONE', 'D-Stone komt uit Amsterdam en brengt een unieke vibe door live instrumenten te mixen met strakke beats. Zijn muziek zit vol percussie en disco-invloeden, perfect voor wie houdt van een aanstekelijke flow.')" class="sound-btn px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-widest">Percussive House</button>
+                    <button onclick="showArtist('Minimal Funk', 'LUCA ROSSI', 'Hou je van rollende baslijnen en diepe, warme house? Luca Rossi draait muziek die perfect is voor de late uurtjes. Zijn sound is subtiel, groovy en heeft precies de juiste diepgang voor de echte liefhebber.')" class="sound-btn px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-widest">Minimal Funk</button>
+                    <button onclick="showArtist('Funky & Joyful', 'SANTO', 'Voor Santo draait house om vrolijkheid en verbinding. Zijn muziek is een mix van funk, jazz en soul met een krachtige kick. Het is die sound waar je direct een lach van op je gezicht krijgt, wat voor weer het ook is.')" class="sound-btn px-6 py-3 rounded-xl font-bold uppercase text-xs tracking-widest">Funky & Joyful</button>
+                </div>
+
+                <div id="sound-result" class="hidden bg-white/20 backdrop-blur-md p-8 rounded-3xl border border-white/30 shadow-xl">
+                    <p class="text-xs uppercase tracking-[0.3em] opacity-60 mb-2 font-bold">Jouw Match:</p>
+                    <h4 id="match-name" class="heading-font text-3xl md:text-5xl mb-4">ARTIEST NAAM</h4>
+                    <p id="match-desc" class="text-sm md:text-base opacity-90 leading-relaxed max-w-2xl mx-auto"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Sectie -->
+        <section id="info" class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-stretch">
+                <div class="glass-panel p-12 rounded-[2.5rem] border-white/20 shadow-xl">
+                    <h3 class="heading-font text-4xl mb-10 drop-shadow-sm">Event Details</h3>
+                    <ul class="space-y-8">
+                        <li class="flex items-center space-x-6">
+                            <span class="w-16 h-16 flex items-center justify-center bg-white text-black font-black rounded-2xl text-sm shrink-0 shadow-lg">LOC</span>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest opacity-70 mb-1 font-bold">Locatie</p>
+                                <p class="text-xl font-bold italic">FG-Live, Heerhugowaard</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center space-x-6">
+                            <span class="w-16 h-16 flex items-center justify-center bg-white text-black font-black rounded-2xl text-sm shrink-0 shadow-lg">TIJD</span>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest opacity-70 mb-1 font-bold">Datum & Tijd</p>
+                                <p class="text-xl font-bold italic">23 Mei | 20:00 - 03:00</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center space-x-6">
+                            <span class="w-16 h-16 flex items-center justify-center bg-white text-black font-black rounded-2xl text-sm shrink-0 shadow-lg">ID</span>
+                            <div>
+                                <p class="text-xs uppercase tracking-widest opacity-70 mb-1 font-bold">Leeftijd</p>
+                                <p class="text-xl font-bold italic">18+</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col">
+                    <h3 class="heading-font text-4xl mb-10 drop-shadow-sm">Powered By</h3>
+                    <div class="grid grid-cols-2 gap-4 flex-grow">
+                        <!-- Hoofdorganisator -->
+                        <div class="partner-logo-box bg-white/20 border-white/40 col-span-2">
+                            <span class="text-[12px] font-black uppercase tracking-[0.3em]">KJ Pulse Collective</span>
+                        </div>
+                        <!-- FG-Live -->
+                        <a href="https://www.fg-live.nl/" target="_blank" class="partner-logo-box group">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] group-hover:scale-110 transition-transform">FG-Live</span>
+                        </a>
+                        <!-- Nomnommm Food -->
+                        <a href="https://nomnommmfood.nl/" target="_blank" class="partner-logo-box group">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] group-hover:scale-110 transition-transform italic">Nomnommm Food</span>
+                        </a>
+                        <!-- Rodi Media -->
+                        <a href="https://www.rodimedia.nl/" target="_blank" class="partner-logo-box group col-span-2">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] group-hover:scale-105 transition-transform">Rodi Media | Rodi.nl</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-20 px-8 border-t border-white/20">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+                <div class="text-center md:text-left">
+                    <p class="heading-font text-3xl mb-1 drop-shadow-sm">Luna's</p>
+                    <p class="text-[9px] tracking-[0.8em] opacity-60 uppercase font-black">House Party Edition 2026</p>
+                </div>
+                
+                <div class="flex space-x-12 items-center">
+                    <a href="https://instagram.com/lunashouseparty.nl" target="_blank" class="text-sm uppercase tracking-widest font-bold hover:text-white hover:opacity-100 opacity-80 transition-all">Instagram</a>
+                    <button onclick="toggleContact()" class="text-sm uppercase tracking-widest font-bold hover:text-white hover:opacity-100 opacity-80 transition-all text-left">Contact</button>
+                    <button onclick="togglePrivacy()" class="text-sm uppercase tracking-widest font-bold hover:text-white hover:opacity-100 opacity-80 transition-all text-left">Privacybeleid</button>
+                </div>
+
+                <div class="text-center md:text-right">
+                    <p class="text-[10px] opacity-50 uppercase tracking-widest mb-2 font-bold">Member of KJ Pulse Collective</p>
+                    <p class="text-[10px] opacity-50">© 2026 Luna's House Party. Alle rechten voorbehouden.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals (Privacy & Contact) -->
+    <div id="privacy-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="bg-[#120a1a] border border-white/20 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative shadow-2xl p-8 md:p-12">
+            <button onclick="togglePrivacy()" class="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-bold">&times;</button>
+            <h2 class="heading-font text-3xl mb-6">Privacybeleid</h2>
+            <div class="space-y-4 text-sm opacity-80 leading-relaxed font-light">
+                <p><strong>KJ Pulse Collective</strong> hecht veel waarde aan de bescherming van jouw persoonsgegevens.</p>
+                <p>Bij het betreden van het evenement ga je akkoord met eventuele beeldopnames voor promotionele doeleinden.</p>
+            </div>
+            <button onclick="togglePrivacy()" class="mt-8 w-full py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold uppercase tracking-widest transition-colors">Sluiten</button>
+        </div>
+    </div>
+
+    <div id="contact-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hidden">
+        <div class="bg-[#120a1a] border border-white/20 rounded-3xl max-w-lg w-full relative shadow-2xl p-8 md:p-12">
+            <button onclick="toggleContact()" class="absolute top-6 right-6 text-white/50 hover:text-white text-2xl font-bold">&times;</button>
+            <h2 class="heading-font text-3xl mb-8">Contact</h2>
+            <div class="space-y-6 text-sm opacity-90 leading-relaxed">
+                <div>
+                    <p class="uppercase tracking-widest text-[10px] opacity-60 font-bold mb-1">Bedrijfsnaam</p>
+                    <p class="text-lg font-bold">V.O.F. KJ Pulse Collective</p>
+                </div>
+                <div>
+                    <p class="uppercase tracking-widest text-[10px] opacity-60 font-bold mb-1">E-mail</p>
+                    <a href="mailto:info@pulsecollective.nl" class="text-lg font-bold hover:text-pink-400 transition-colors">info@pulsecollective.nl</a>
+                </div>
+            </div>
+            <button onclick="toggleContact()" class="mt-10 w-full py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold uppercase tracking-widest transition-colors">Sluiten</button>
+        </div>
+    </div>
+
+    <script>
+        // Start animatie
+        window.onload = function() {
+            document.body.style.opacity = "1";
+        };
+
+        // Modal logica
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+        function togglePrivacy() { toggleModal('privacy-modal'); }
+        function toggleContact() { toggleModal('contact-modal'); }
+
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const eventDate = new Date("May 23, 2026 20:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0"+d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0"+h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0"+m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0"+s : s;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Artist Matcher
+        function showArtist(genre, name, desc) {
+            const resultDiv = document.getElementById('sound-result');
+            resultDiv.classList.remove('hidden');
+            document.getElementById('match-name').innerText = name;
+            document.getElementById('match-desc').innerText = desc;
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
